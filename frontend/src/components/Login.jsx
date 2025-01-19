@@ -14,16 +14,13 @@ function UserLogin() {
         userName,
         password,
       });
-      console.log(response.data);
 
-      // If login is successful
+      const { token, userInfo } = response.data;
+      localStorage.setItem("authToken", token); // Save token to local storage
+      setUserDetails(userInfo); // Save user details locally
+      setErrorMessage("");
       alert("Login successful!");
-      setUserDetails(response.data); // Set user details after login
-      console.log("Response Data:", response.data);
-
-      setErrorMessage(""); // Clear any error messages
     } catch (error) {
-      // If login fails
       alert("Login failed. Please check your username and password.");
       setErrorMessage("Invalid username or password.");
       setUserDetails(null);

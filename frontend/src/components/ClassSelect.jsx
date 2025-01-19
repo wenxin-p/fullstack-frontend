@@ -7,9 +7,9 @@ function ClassSelect({
   setReservationMessage,
   setReservationDetails,
 }) {
-  // To call createreservations function.
   const handleReserve = async (classID) => {
-    if (!userInfo || !userInfo._id) {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
       setReservationMessage("You must log in before making a reservation.");
       window.alert("You must log in before making a reservation.");
       return;
@@ -18,15 +18,16 @@ function ClassSelect({
     try {
       const response = await axios.post(
         "http://localhost:3000/studio/reservations",
+        { classID }, // Only include classID
         {
-          classID,
-          membershipID: userInfo.membershipID,
+          headers: {
+            Authorization: `Bearer ${token}`, // Add token to Authorization header
+          },
         }
       );
 
       const successMessage = `Reservation successful! Reservation ID: ${response.data.reservationID}`;
       setReservationMessage(successMessage);
-      // Display a success prompt
       window.alert(successMessage);
       setReservationDetails(null);
     } catch (error) {
